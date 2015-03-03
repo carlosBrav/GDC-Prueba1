@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>ESCUELA DE SOFTWARE</title>
+		</f:facet>
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/resources/css/atencionEstilo.css" />
+	</h:head>
+	<h:body id="cuerpo">
+		<pe:layout fullPage="true" id="layoutAll">
+			<pe:layoutPane position="north" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoEncabezado"
+					style="width:100%;">
+					<h:form style="text-align:left;">
+						<iframe
+							src="/siscadweb/resources/encabezados/izquierdo/izquierdo.html"
+							width="250px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+					</h:form>
+
+					<h:form style="text-align:right;">
+						<iframe
+							src="/siscadweb/resources/encabezados/derecho/derecho.html"
+							width="400px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="west" spacingOpen="0" spacingClosed="0"
+				style="width:30px">
+				<f:facet name="header">  
+                   Opciones 
+                </f:facet>
+				<h:form id="frmGenral">
+					<p:growl id="mensajes" sticky="true" />
+					<p:panelMenu>
+						<p:submenu label="Cursos" style="font-size:10px">
+							<p:menuitem value="Aperturar Cursos"
+								actionListener="#{cargaHorariosController.cargaOpcionCursos}"
+								update=":#{p:component('centralForm')}"
+								icon="ui-icon-arrowrefresh-1-w" />
+							<p:menuitem value="Cerrar Cursos"
+								actionListener="#{cargaHorariosController.cargaOpcionCursos}"
+								update=":#{p:component('centralForm')}"
+								icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+						<p:submenu label="Horarios" style="font-size:10px">
+							<p:menuitem value="Registrar"
+								actionListener="#{cargaHorariosController.cargaOpcionHorarios}"
+								update=":#{p:component('centralForm')}"
+								icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+						<p:submenu label="Reportes" style="font-size:10px">
+							<p:menuitem value="Reporte de Horarios"
+								actionListener="#{cargaHorariosController.cargaOpcionReportes}"
+								update=":#{p:component('centralForm')}"
+								icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+					</p:panelMenu>
+				</h:form>
+			</pe:layoutPane>
+
+			<pe:layoutPane id="layoutcenter" position="center" spacingOpen="0"
+				spacingClosed="0">
+
+				<h:form id="centralForm">
+					<div align="center">
+						<p:panel rendered="#{cargaHorariosController.opcionCursos}">
+							<f:facet name="header">  
+                                Opcion Cursos 
+                            </f:facet>
+
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+									<p:commandButton value="Aperturar Cursos"
+										icon="ui-icon-document"
+										actionListener="#{cargaHorariosController.clickAperturar}"
+										update=":#{p:component('centralForm')}" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable id="cursosTable" var="ciclo"
+								value="#{cargaHorariosController.cursos_ciclo}">
+
+								<f:facet name="header">
+									<br></br>
+                                Cursos Aperturados  
+                                <br></br>
+								</f:facet>
+
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="2" headerText="Curso" />
+										<p:column colspan="1" headerText="Numero de Grupos" />
+									</p:row>
+								</p:columnGroup>
+								<p:subTable var="curso" value="#{ciclo.cursos}">
+									<br></br>
+									<br></br>
+									<f:facet name="header">
+										<h:outputText value="#{ciclo.cicloNombre}" />
+									</f:facet>
+
+									<p:column>
+										<p:commandButton value="Editar"
+											update=":#{p:component('centralForm')}">
+											<f:setPropertyActionListener value="#{curso}"
+												target="#{cargaHorariosController.cursoSelected}" />
+										</p:commandButton>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Curso" />
+										</f:facet>
+										<h:outputText value="#{curso.nombre}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Numero de Grupos" />
+										</f:facet>
+										<h:outputText value="#{curso.numGrupo} " />
+									</p:column>
+
+								</p:subTable>
+							</p:dataTable>
+							<br></br>
+							<br></br>
+
+						</p:panel>
+
+						<p:panel rendered="#{cargaHorariosController.opcionAperturar}">
+							<f:facet name="header">  
+                                 Opcion Aperturar!""!
+                            </f:facet>
+
+							<br></br>
+							<br></br>
+
+							<p:pickList id="pickList"
+								value="#{cargaHorariosController.dualCursosBase}" var="cursob"
+								effect="bounce" itemValue="#{cursob}" itemLabel="#{cursob}"
+								showSourceControls="true" showTargetControls="true"
+								showCheckbox="true" showSourceFilter="true"
+								showTargetFilter="true" filterMatchMode="contains">
+
+								<f:facet name="sourceCaption">Cursos NO Aperturados</f:facet>
+								<f:facet name="targetCaption">Cursos a Aperturarse</f:facet>
+
+								<p:column style="width:75%;">  
+                                    #{cursob}  
+                                </p:column>
+							</p:pickList>
+
+							<br></br>
+
+							<p:commandButton id="citySubmit" value="Guardar Cambios"
+								update="displayCursosb" oncomplete="PF('cursosbDialog').show()"
+								style="margin-top:5px" />
+
+							<p:dialog header="Confirmacion" widgetVar="cursosbDialog"
+								showEffect="explode" hideEffect="bounce">
+								<h:panelGrid id="displayCursosb" margin="auto">
+									<h:outputText
+										value="Los siguientes #{cargaHorariosController.dualCursosBase.target.size()} seran aperturados: "
+										style="font-weight:bold" />
+									<br></br>
+									<ui:repeat
+										value="#{cargaHorariosController.dualCursosBase.target}"
+										var="item">
+										<h:outputText value="#{item}" style="margin-right:5px" />
+										<br></br>
+									</ui:repeat>
+
+									<h:outputText value="Esta seguro de proceder? "
+										style="font-weight:bold" />
+
+									<h:panelGrid columns="2" margin="auto">
+										<p:commandButton id="cssssssy" value="Proceder" margin="auto"
+											actionListener="#{cargaHorariosController.guardarCursosBase}"
+											update=":#{p:component('centralForm')}" />
+										<p:commandButton id="cssssssx" value="Cancelar" margin="auto"
+											actionListener="#{cargaHorariosController.guardarCursosBase}"
+											update=":#{p:component('centralForm')}" />
+									</h:panelGrid>
+								</h:panelGrid>
+							</p:dialog>
+
+						</p:panel>
+
+						<p:panel rendered="#{cargaHorariosController.opcionEditarCursob}">
+							<f:facet name="header">  
+                                 Opcion EditarCursob
+                            </f:facet>
+							<h:outputText value="Curso: " />
+							<h:outputText
+								value="#{cargaHorariosController.cursoSelected.nombre}"
+								style="font-weight:bold" />
+							<br></br>
+							<h:outputText value="Numero de Grupos: " />
+							<h:outputText
+								value="#{cargaHorariosController.cursoSelected.numGrupo}"
+								style="font-weight:bold" />
+							<br></br>
+							<br></br>
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+									<p:commandButton value="Añadir Grupo" icon="ui-icon-document"
+										oncomplete="PF('nuevoGrupoDialog').show()"
+										update="displayNuevoGrupo" />
+								</p:toolbarGroup>
+							</p:toolbar>
+							<p:dataTable var="grupo_curso"
+								value="#{cargaHorariosController.grupos_curso}">
+
+								<p:column>
+									<p:commandButton value="Editar"
+										update=":#{p:component('centralForm')}">
+										<f:setPropertyActionListener value="#{grupo_curso}"
+											target="#{cargaHorariosController.grupoSelected}" />
+									</p:commandButton>
+								</p:column>
+
+								<p:column headerText="GrupoId">
+									<h:outputText value="#{grupo_curso.idGrupo}" />
+								</p:column>
+
+								<p:column headerText="Grupo">
+									<h:outputText value="Grupo #{grupo_curso.grupoNumero}" />
+								</p:column>
+							</p:dataTable>
+
+							<p:dialog header="Confirmacion" widgetVar="nuevoGrupoDialog"
+								showEffect="explode" hideEffect="bounce">
+								<h:panelGrid id="displayNuevoGrupo" margin="auto">
+									<h:outputText value="Esta seguro que desea agregar :" />
+									<h:outputText
+										value="Grupor N°#{cargaHorariosController.grupoToCreate.grupoNumero} "
+										style="font-weight:bold" />
+									<h:outputText value="al curso " />
+									<h:outputText
+										value="#{cargaHorariosController.cursoSelected.nombre} ?"
+										style="font-weight:bold" />
+									<br></br>
+									<h:panelGrid columns="2" margin="auto">
+										<p:commandButton value="Proceder" margin="auto"
+											actionListener="#{cargaHorariosController.crearGrupo}"
+											update=":#{p:component('centralForm')}" />
+										<p:commandButton value="Cancelar" margin="auto"
+											actionListener="#{cargaHorariosController.crearGrupo}"
+											update=":#{p:component('centralForm')}" />
+									</h:panelGrid>
+								</h:panelGrid>
+							</p:dialog>
+
+						</p:panel>
+
+						<p:panel rendered="#{cargaHorariosController.opcionEditarGrupo}">
+							<f:facet name="header">  
+                                 Opcion EditarGrupo
+                            </f:facet>
+							<h:outputText value="Curso: " />
+							<h:outputText
+								value="#{cargaHorariosController.cursoSelected.nombre}"
+								style="font-weight:bold" />
+							<br></br>
+							<h:outputText value="Grupo N° " />
+							<h:outputText
+								value="#{cargaHorariosController.grupoSelected.grupoNumero}"
+								style="font-weight:bold" />
+							<br></br>
+							<br></br>
+							<p:panel rendered="#{cargaHorariosController.opcionNuevoHorario}">
+								<f:facet name="header">
+									<h:outputText value="Nuevo Horario" style="font-weight:bold" />
+								</f:facet>
+								<h:panelGrid columns="2">
+									<h:outputLabel for="tipoClase" value="Tipo de Clase: " />
+									<p:selectOneMenu id="tipoClase"
+										value="#{cargaHorariosController.tipoClaseSelected}">
+										<f:selectItems value="#{cargaHorariosController.tipoClases}" />
+									</p:selectOneMenu>
+									<h:outputText for="dia" value="Dia: " />
+									<p:selectOneMenu id="dia"
+										value="#{cargaHorariosController.diaSelected}">
+										<f:selectItems value="#{cargaHorariosController.dias}" />
+									</p:selectOneMenu>
+									<h:outputText for="horai" value="Hora Inicio: " />
+									<p:calendar id="horai" value="#{cargaHorariosController.horaInicio}"
+										pattern="HH:mm" minHour="8" maxHour="22" timeOnly="true" />
+									<h:outputText for="horaf" value="Hora Fin: " />
+									<p:calendar id="horaf" value="#{cargaHorariosController.horaFin}"
+										pattern="HH:mm" minHour="8" maxHour="22" timeOnly="true" />
+									<h:outputText value="Docente: " />
+									<h:panelGrid columns="2">
+										<h:outputText
+											value="#{cargaHorariosController.docenteSelected.nombre}, #{cargaHorariosController.docenteSelected.apPaterno} #{cargaHorariosController.docenteSelected.apMaterno}" />
+										<p:commandButton value="Buscar" icon="ui-icon-search"
+											actionListener="#{cargaHorariosController.cargarProfesores}"
+											oncomplete="PF('buscaProfesor').show()"
+											update="displayBuscarProfesor" />
+									</h:panelGrid>
+								</h:panelGrid>
+
+								<p:dialog header="Buscar Profesor" widgetVar="buscaProfesor"
+									showEffect="explode" hideEffect="bounce" width="50%">
+									<h:panelGrid id="displayBuscarProfesor">
+										<p:dataTable var="docente"
+											value="#{cargaHorariosController.docentes}" scrollable="true"
+											scrollHeight="150" rowKey="#{docente.idDocente}"
+											selection="#{cargaHorariosController.docenteSelected}"
+											selectionMode="single">
+											<p:ajax event="rowSelect"
+												update=":#{p:component('centralForm')}"
+												oncomplete="PF('buscaProfesor').hide()" />
+											<p:column headerText="DocenteId">
+												<h:outputText value="#{docente.idDocente}" />
+											</p:column>
+											<p:column headerText="Codigo">
+												<h:outputText value="#{docente.codigo}" />
+											</p:column>
+											<p:column headerText="Apellido Paterno">
+												<h:outputText value="#{docente.apPaterno}" />
+											</p:column>
+											<p:column headerText="Apellido Materno">
+												<h:outputText value="#{docente.apMaterno}" />
+											</p:column>
+											<p:column headerText="Nombre">
+												<h:outputText value="#{docente.nombre}" />
+											</p:column>
+										</p:dataTable>
+									</h:panelGrid>
+								</p:dialog>
+								<br></br>
+                                <p:commandButton value="Guardar"
+								    actionListener="#{cargaHorariosController.validarNuevoHorario}"
+									oncomplete="PF('nuevoHorarioDialog').show()"
+									update=":#{p:component('centralForm')}" />
+								<p:commandButton value="Cancelar"
+									actionListener="#{cargaHorariosController.validarNuevoHorario}"
+									update=":#{p:component('centralForm')}" />
+								<p:growl id="growlxy" showDetail="true" sticky="true" severity="warn" life="3000"/>
+
+								<p:dialog header="Confirmacion" widgetVar="nuevoHorarioDialog"
+									showEffect="explode" hideEffect="bounce">
+									<h:panelGrid id="displayNuevoHorario">
+										<h:panelGrid margin="auto"
+											rendered="#{cargaHorariosController.horarioValidado}">
+											<h:outputText value="Nuevo Horario:" />
+											<br></br>
+											<h:outputText value="Tipo: #{cargaHorariosController.tipoClaseSelected}" />
+											<h:outputText value="Dia: #{cargaHorariosController.diaSelected}" />											
+											<h:outputText value="Docente: #{cargaHorariosController.docenteSelected.nombre}, #{cargaHorariosController.docenteSelected.apPaterno} #{cargaHorariosController.docenteSelected.apMaterno}" />
+										    <h:outputText value="Hora Inicio: " />											    
+										    <h:outputText value="#{cargaHorariosController.horaInicio}" >
+										        <f:convertDateTime type="date" timeZone="America/Lima" pattern="HH:mm:ss"/>
+										    </h:outputText>	
+										    <h:outputText value="Hora Fin:" />	
+										    <h:outputText value="#{cargaHorariosController.horaFin}" >
+										        <f:convertDateTime type="date" timeZone="America/Lima" pattern="HH:mm:ss"/>
+										    </h:outputText>											    
+										    <br></br>
+										    <h:outputText value="Esta Seguro de crear el nuevo Horario" />
+										    <h:panelGrid margin="auto" columns="2">
+												<p:commandButton value="Si, continuar" 
+												actionListener="#{cargaHorariosController.crearNuevoHorario}" 											
+										        update=":#{p:component('centralForm')}" />
+												<p:commandButton value="No, Cancelar" 											
+										        update=":#{p:component('centralForm')}" />
+											</h:panelGrid>
+										</h:panelGrid>
+										<h:panelGrid margin="auto"
+											rendered="#{!cargaHorariosController.horarioValidado}">
+											<h:outputText value="Revisa los siguientes errores :" />
+											<br></br>
+											<ui:repeat
+												value="#{cargaHorariosController.error}"
+												var="error">
+												<h:outputText value="#{error}" style="margin-right:5px" />
+												<br></br>
+											</ui:repeat>
+										</h:panelGrid>
+									</h:panelGrid>
+								</p:dialog>
+								<br></br>
+							</p:panel>
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+									<p:commandButton value="Añadir Nuevo Horario"
+										icon="ui-icon-document"
+										actionListener="#{cargaHorariosController.cargaOpcionNuevoHorario}"
+										disabled="#{cargaHorariosController.opcionNuevoHorario}"
+										update=":#{p:component('centralForm')}" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:dataTable var="horario"
+								value="#{cargaHorariosController.horarios_clase}">
+								<p:column headerText="Tipo">
+									<h:outputText value="#{horario.horarioClaseTipo}" />
+								</p:column>
+
+								<p:column headerText="Dia">
+									<h:outputText value="#{horario.diaNombre}" />
+								</p:column>
+
+								<p:column headerText="Horario">
+									<h:outputText
+										value="#{horario.horaInicio} - #{horario.horaFin}" />
+								</p:column>
+
+								<p:column headerText="Aula">
+									<h:outputText value="#{horario.aula}" />
+								</p:column>
+
+								<p:column headerText="Docente">
+									<h:outputText
+										value="#{horario.docente.apPaterno} #{horario.docente.apMaterno}, #{horario.docente.nombre}" />
+								</p:column>
+							</p:dataTable>
+						</p:panel>
+
+						<p:panel rendered="#{cargaHorariosController.opcionReportes}">
+							<f:facet name="header">  
+                                 Opcion Reportes 
+                            </f:facet>
+							<h:outputLabel for="firstname" value="Firstname: *" />
+							<p:inputText id="firstname1" value="" label="Firstname" />
+
+							<h:outputLabel for="surname" value="Surname: *" />
+							<p:inputText id="surname1" value="" required="true"
+								label="Surname" />
+						</p:panel>
+
+						<p:panel columns="2"
+							rendered="#{cargaHorariosController.opcionHorarios}">
+							<f:facet name="header">  
+                                 Opcion Horarios
+                            </f:facet>
+							<h:outputLabel for="firstname2" value="Firstname: *" />
+							<p:inputText id="firstname2" value="" label="Firstname" />
+
+							<h:outputLabel for="surname" value="Surname: *" />
+							<p:inputText id="surname2" value="" required="true"
+								label="Surname" />
+						</p:panel>
+
+					</div>
+				</h:form>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="south" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoFooter"
+					style="width:100%;height:40px">
+					<h:form
+						style="text-align:left;color:#FFFFFF;margin-left:10px;font-weight: bold">
+						<h:outputText value="SISCADWEB - Area de Desarrollo de Software" />
+					</h:form>
+
+					<h:form style="text-align:right">
+						<p:commandLink id="endSesion" action="#{loginController.logout}">
+							<p:graphicImage value="/resources/img/salir5.png"
+								style="width:33px;height:33px" />
+							<!--<h:outputText value="CERRAR SESION" style="color:#FFFFFF;font-weight: bold; margin-right:4px"/>  -->
+						</p:commandLink>
+						<p:tooltip for="endSesion" value="Cerrar Sesión" showEffect="clip"
+							hideEffect="explode" />
+
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+		</pe:layout>
+	</h:body>
+</f:view>
+</html>

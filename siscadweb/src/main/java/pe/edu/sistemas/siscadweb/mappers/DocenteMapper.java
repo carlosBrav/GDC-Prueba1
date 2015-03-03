@@ -1,0 +1,77 @@
+package pe.edu.sistemas.siscadweb.mappers;
+
+import java.util.List;
+import org.apache.ibatis.annotations.Select;
+import pe.edu.sistemas.siscadweb.entities.Docente;
+import org.apache.ibatis.annotations.Param;
+
+public interface DocenteMapper {
+	/* No olvidar colocar --> NOMBRE_COLUMNA_TABLA as NOMBRE_CAMPO_ENTITY */
+	@Select("select d.iddocente as idDocente," 
+			+ "p.persona_nombre as nombre,"
+			+ "p.persona_codigo as codigo,"
+			+ "p.persona_appaterno as appaterno,"
+			+ "p.persona_apmaterno as apmaterno "
+			+ "from DOCENTE d, PERSONA p "
+			+ "where d.persona_id_persona = p.id_persona ")
+	List<Docente> findAllDocentes();
+
+	@Select("select d.iddocente as idDocente," 
+			+ "p.persona_nombre as nombre,"
+			+ "p.persona_codigo as codigo,"
+			+ "p.persona_appaterno as appaterno,"
+			+ "p.persona_apmaterno as apmaterno "
+			+ "from DOCENTE d, PERSONA p "
+			+ "where d.persona_id_persona = p.id_persona "
+			+ "and iddocente = #{id}")
+	Docente obtenerDocentexID(int id);
+	
+/* YA IMPLEMENTE ESTOS METODOS Y LOS TESTEE PETER! 
+	@Select("Select d.iddocente as id," 
+			+ "p.persona_nombre as nombre,"
+			+ "p.persona_codigo as codigo,"
+			+ "p.persona_appaterno as apPaterno,"
+			+ "p.persona_apmaterno as apMaterno"
+			+ "from DOCENTE d INNER JOIN PERSONA p "
+			+ "ON d.persona_id_persona = p.id_persona"
+			+ "where iddocente = #{id}")
+	List<Docente> ReadCodigo(String id);
+	
+	@Select("Select d.iddocente as id," 
+			+ "p.persona_nombre as nombre,"
+			+ "p.persona_codigo as codigo,"
+			+ "p.persona_appaterno as apPaterno,"
+			+ "p.persona_apmaterno as apMaterno"
+			+ "from DOCENTE d INNER JOIN PERSONA p "
+			+ "ON d.persona_id_persona = p.id_persona"
+			+ "where p.persona_nombre like '%#{nombre}%' " 
+			+ "and p.persona_appaterno like '%#{apPaterno}%' " 
+			+ "and p.persona_apmaterno like '%#{apMaterno}%'")
+	List<Docente> SelectDocentesxOtros(String nombre, String apPaterno, String apMaterno);
+	*/
+	
+	@Select("SELECT IDDOCENTE as idDocente,"
+			+ "PERSONA_CODIGO as codigo,"
+			+ "PERSONA_NOMBRE as nombre,"
+			+ "PERSONA_APPATERNO as apPaterno,"
+			+ "PERSONA_APMATERNO as apMaterno "
+			+ "FROM docente d "
+			+ "INNER JOIN persona p ON d.PERSONA_ID_PERSONA = p.ID_PERSONA "
+			+ " WHERE p.PERSONA_CODIGO = #{codigo} LIMIT 1")
+	Docente obtenerDocentexCodigo(String codigo); 
+	
+	
+	@Select("SELECT IDDOCENTE as idDocente,"
+			+ "PERSONA_CODIGO as codigo,"
+			+ "PERSONA_NOMBRE as nombre,"
+			+ "PERSONA_APPATERNO as apPaterno,"
+			+ "PERSONA_APMATERNO as apMaterno "
+			+ "FROM docente d "
+			+ "INNER JOIN persona p ON d.PERSONA_ID_PERSONA = p.ID_PERSONA " 
+			+ "WHERE p.PERSONA_NOMBRE LIKE #{nombre} "
+			+ "AND p.PERSONA_APPATERNO LIKE #{appaterno} "
+			+ "AND p.PERSONA_APMATERNO LIKE #{apmaterno}")
+	List<Docente> obtenerDocentexOtro(@Param(value="nombre")String nombre, @Param(value="appaterno")String appaterno,
+									  @Param(value="apmaterno")String apmaterno);
+	
+}

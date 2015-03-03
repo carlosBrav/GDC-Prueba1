@@ -1,0 +1,730 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>Sistema de Asistencia Docente</title>
+		</f:facet>
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/resources/css/atencionEstilo.css" />
+	</h:head>
+	<h:body id="cuerpo">
+		<pe:layout fullPage="true" id="layoutAll">
+			<pe:layoutPane position="north" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoEncabezado"
+					style="width:100%;">
+					<h:form style="text-align:left;">
+						<!--<p:graphicImage value="/resources/img/encabezadoIzq.JPG"
+							style="height: 70px; width: 250px" />  -->
+						<iframe
+							src="/siscadweb/resources/encabezados/izquierdo/izquierdo.html"
+							width="250px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+
+					</h:form>
+
+					<h:form style="text-align:right;">
+						<!--  <p:graphicImage value="/images/ui/encabezadoDer3.JPG"
+							style="height: 70px; width: 200px" />-->
+						<iframe
+							src="/siscadweb/resources/encabezados/derecho/derecho.html"
+							width="400px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="west" spacingOpen="0" spacingClosed="0"
+				style="width:30px">
+				<f:facet name="header">  
+                   Opciones 
+                </f:facet>
+				<h:form id="frmGenral">
+					<p:growl id="mensajes" life="2000" />
+					<p:panelMenu>
+						<p:submenu label="Registro Manual" style="font-size:10px">
+							<p:menuitem value="Grupal"
+								actionListener="#{menuBean.setSelectedMenu(menuBean.OPT1)}"
+								update="layoutAll" ajax="false" icon="ui-icon-arrowrefresh-1-w" />
+							<p:menuitem value="Por Docente"
+								actionListener="#{menuBean.setSelectedMenu(menuBean.OPT2)}"
+								update="layoutAll" ajax="false" icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+					</p:panelMenu>
+					<p:panelMenu>
+						<p:submenu label="Recuperación" style="font-size:10px">
+							<p:menuitem value="Registrar"
+								actionListener="#{menuBean.setSelectedMenu(menuBean.OPT3)}"
+								update="layoutAll" ajax="false" icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+					</p:panelMenu>
+					<p:panelMenu>
+						<p:submenu label="Reportes" style="font-size:10px">
+							<p:menuitem value="Faltas Mensuales"
+								actionListener="#{menuBean.setSelectedMenu(menuBean.OPT4)}"
+								update="layoutAll" ajax="false" icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+					</p:panelMenu>
+				</h:form>
+			</pe:layoutPane>
+
+			<pe:layoutPane id="lycRegAsistGrupal" position="center"
+				spacingOpen="0" spacingClosed="0"
+				rendered="#{menuBean.selectedMenu == menuBean.OPT1}">
+				<f:facet name="header">  
+                   Registro Manual - Grupal
+                </f:facet>
+				<h:form id="idFrmRegGrupal">
+					<div align="center">
+						<h:panelGrid columns="1" cellspacing="6"
+							style="width:1100px;margin-top:5px;padding:0px">
+							<p:panel id="panelRegManualGrupal" style="border:1px solid;">
+								<!--<h:outputText value="Buscar Asistencias" style="font-weight: bold;"/>  -->
+								<h:panelGrid columns="30" cellspacing="1">
+									<h:outputText value="FECHA " />
+									<h:outputText value=" " />
+									<p:calendar id="popupButtonCal" required="true"
+										value="#{regManualGrupalController.fechaSeleccionada}"
+										requiredMessage="Fecha requerida" showOn="button" size="15" />
+									<h:outputText value=" " />
+									<h:outputText value="INICIO" />
+									<h:outputText value=" " />
+									<h:outputText value=" " />
+									<p:selectOneMenu id="idhoraInicio" required="true"
+										value="#{regManualGrupalController.inicioSeleccionado}"
+										requiredMessage="Hora de inicio requerida" effect="drop">
+										<f:selectItem itemLabel="00:00" itemValue="" />
+										<f:selectItems
+											value="#{regManualGrupalController.horasInicio}" var="inicio"
+											itemLabel="#{inicio}" itemValue="#{inicio}" />
+										<p:ajax
+											listener="#{regManualGrupalController.establecerHorasSalida}"
+											update="idhoraFin" />
+									</p:selectOneMenu>
+									<h:outputText value=" " />
+									<h:outputText value=" " />
+									<h:outputText value="FIN" />
+									<h:outputText value=" " />
+									<p:selectOneMenu id="idhoraFin" required="true"
+										value="#{regManualGrupalController.salidaSeleccionada}"
+										requiredMessage="Hora de salida requerida" effect="drop">
+										<f:selectItem itemLabel="00:00" itemValue="" />
+										<f:selectItems
+											value="#{regManualGrupalController.horasSalida}" var="salida"
+											itemLabel="#{salida}" itemValue="#{salida}" />
+									</p:selectOneMenu>
+									<p:commandButton id="mostrarBusqueda" value="BUSCAR"
+										icon="ui-icon-search" style="margin-left:15px" ajax="false"
+										action="#{regManualGrupalController.validarFecha}"
+										update="idFrmRegGrupal">
+									</p:commandButton>
+									<!--<p:panel id="panelRegManualGrupalReg" style="border:1px solid gray;margin-left:350px">  -->
+									<p:commandButton id="registrar" value="REGISTRAR"
+										style="border:1px orange solid;margin-left:350px"
+										disabled="#{regManualGrupalController.regSeleccionados == null}"
+										icon="ui-icon-check"
+										action="#{regManualGrupalController.validarRegistrar}"
+										update=":frmGenral">
+									</p:commandButton>
+									<!--  </p:panel>-->
+								</h:panelGrid>
+							</p:panel>
+
+						</h:panelGrid>
+						<p:dataTable id="tableRegGrupal" var="registro"
+							value="#{regManualGrupalController.regManualDataModel}"
+							selection="#{regManualGrupalController.regSeleccionados}"
+							emptyMessage="Asistencia(s) no encontrada(s)"
+							style="width:1100px;margin:1%;height:400px"
+							widgetVar="asistGrupalTable" scrollable="true" scrollHeight="400">
+							<!--  -->
+							<f:facet name="header">
+		                        Asistencias Docentes
+		                    </f:facet>
+
+							<p:column selectionMode="multiple" style="width:18px">
+							</p:column>
+
+							<p:column headerText="Codigo" style="width:60px">
+								<div align="center">#{registro.codigo}</div>
+							</p:column>
+							<p:column headerText="Nombre del Docente">  
+					            #{registro.nomDocente}  
+					        </p:column>
+							<p:column headerText="Grupo" style="width:40px">
+								<div align="center">#{registro.grupo}</div>
+							</p:column>
+							<p:column headerText="Curso">  
+					            #{registro.nomCurso}  
+					        </p:column>
+							<p:column headerText="Tipo" style="width:110px">  
+					            #{registro.tipo}  
+					        </p:column>
+							<p:column headerText="Entrada" style="width:70px;">
+								<div align="center"
+									style="#{registro.entrada == 'NO ASIS' ? 'color: red': 'color: green'}">
+									#{registro.entrada}
+								</div>
+							</p:column>
+							<p:column headerText="Salida" style="width:70px;">
+								<div align="center"
+									style="#{registro.salida == 'NO ASIS' ? 'color: red': 'color: green'}">
+									#{registro.salida}
+								</div>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</h:form>
+			</pe:layoutPane>
+
+			<p:dialog header="Registro Grupal de Asistencias" modal="true"
+				widgetVar="dialogo"
+				visible="#{regManualGrupalController.showDialog and facesContext.validationFailed}"
+				resizable="false" showEffect="puff" hideEffect="explode">
+				<h:form>
+					<h:panelGrid columns="3" cellpadding="1"
+						style="margin-top:5px;margin-bottom:10px">
+						<h:outputText value="Motivo" />
+						<h:outputText value=" " />
+						<p:selectOneMenu id="idmotivo" required="true"
+							requiredMessage="Motivo requerido"
+							value="#{regManualGrupalController.motivoSeleccionado}">
+							<f:selectItem itemLabel="Seleccione un motivo" itemValue="" />
+							<f:selectItems value="#{regManualGrupalController.motivos}"
+								var="motivo" itemLabel="#{motivo.motivoNombre}"
+								itemValue="#{motivo.idMotivo}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:outputText value="Descripción" />
+					<br></br>
+					<h:outputText value=" " style="margin-top:7px" />
+					<p:inputTextarea id="descripcion" required="true"
+						style="margin-top:7px" requiredMessage="Descripcion requerida"
+						rows="3" cols="35"
+						value="#{regManualGrupalController.descripcion}" />
+					<br></br>
+					<div align="center">
+						<p:commandButton id="registrarAsistencia" value="ACEPTAR"
+							style="margin-top:10px" ajax="false"
+							action="#{regManualGrupalController.marcarAsistencias}">
+						</p:commandButton>
+					</div>
+				</h:form>
+			</p:dialog>
+
+			<pe:layoutPane id="lycRegAsistIndiv" position="center"
+				spacingOpen="0" spacingClosed="0"
+				rendered="#{menuBean.selectedMenu == menuBean.OPT2}">
+				<f:facet name="header">  
+                   Registro Manual - Por Docente
+                </f:facet>
+				<h:form id="regIndForm">
+					<div align="center">
+						<p:panel id="panelRegManualIndiv"
+							style="border:1px solid; height:100px; margin:1%; width:1000px">
+							<div align="center">
+								<h:panelGrid columns="4" cellspacing="5">
+									<h:outputText value="DOCENTE " />
+									<h:outputText value=": " />
+									<h:outputText value="#{regManualIndivController.docActual}" />
+									<p:commandButton value="BUSCAR" icon="ui-icon-zoomout"
+										onclick="dialogoDocentes.show()" />
+								</h:panelGrid>
+							</div>
+							<div align="left" style="margin-top: 6px">
+								<h:panelGrid columns="8" cellspacing="5">
+									<h:outputText value="FECHAS" />
+									<h:outputText value=":" />
+									<h:outputText value="INICIO" />
+									<p:calendar value="#{regManualIndivController.fechaSeleccionadaInicial}"
+										id="idFechaIni" size="15" showOn="button" required="true"
+										requiredMessage="Fecha inicio requerida" />
+									<h:outputText value="FIN" />
+									<p:calendar value="#{regManualIndivController.fechaSeleccionadaFinal}"
+										id="idFechaFin" size="15" showOn="button" required="true"
+										requiredMessage="Fecha final requerida" />
+												
+									<p:commandButton value="CONSULTAR" icon="ui-icon-zoomout" style="margin-left:10px" ajax="false"
+									action="#{regManualIndivController.obtenerAsistencia}" update="regIndForm" />
+									
+									<p:commandButton value="EDITAR" icon = "ui-icon-pencil" style="margin-left:280px"
+														onclick="dialogoRegDocentes.show()"/>
+
+
+								</h:panelGrid>
+							</div>
+						</p:panel>
+
+						<p:dataTable id="tableRegIndividual" var="registro"
+							value="#{regManualIndivController.regManuales}"
+							selection="#{regManualIndivController.regSeleccionado}" 
+							emptyMessage="Asistencia(s) no encontrada(s)" style="width:1000px;margin:1%"
+							widgetVar="asistTabIndiv" scrollable="true"
+							rowKey="#{registro}"
+							scrollHeight="400"
+							selectionMode="single">
+
+
+							<f:facet name="header">
+						      Asistencias Docentes
+						    </f:facet>
+
+							<p:column headerText="Codigo" style="width:60px">
+					            #{registro.codigo}  
+					        </p:column>
+
+							<p:column headerText="Grupo" style="width:40px">  
+					            #{registro.grupo}  
+					        </p:column>
+		
+							<p:column headerText="Curso" style="width:110px">  
+					            #{registro.nomCurso}  
+					        </p:column>
+
+							<p:column headerText="Fecha" style="width:80px">  
+					            #{registro.fecha}  
+					        </p:column>
+
+							<p:column headerText="Tipo" style="width:110px">  
+					            #{registro.tipo}  
+					        </p:column>
+
+							<p:column headerText="Entrada" style="width:80px">  
+					            #{registro.entrada}  
+					        </p:column>
+
+							<p:column headerText="Salida" style="width:80px">  
+					            #{registro.salida}  
+					        </p:column>
+
+							<p:column headerText="Marcación" style="width:140px">  
+					            #{registro.tipoMarca}  
+					        </p:column>
+						</p:dataTable>
+					</div>
+
+				</h:form>
+			</pe:layoutPane>
+
+			
+			<p:dialog id="dialogReg" header="Registrar Asistencia" style="width:420px" modal="true"
+				resizable="false" widgetVar="dialogoRegDocentes" showEffect="puff" hideEffect="puff">
+				<h:form>
+					<h:panelGrid columns="3" cellpadding="1" style="margin-top:5px;margin-bottom:10px">
+						<h:outputText value="Docente" />
+						<h:outputText value=" " />
+						<h:outputText value="#{regManualIndivController.docSeleccionado.apPaterno}" />
+						<h:outputText value=" " />
+						<h:outputText value=" " />
+						<h:outputText value=" " />
+						<h:outputText value="Hora de Entrada: " />
+						<h:outputText value=" " />
+						<p:selectOneMenu id="idhoraEntrada" required="true"
+								value="#{regManualGrupalController.salidaSeleccionada}"
+								requiredMessage="Hora de entrada requerida" effect="drop">
+								<f:selectItem itemLabel="00" itemValue="" />
+								<f:selectItems
+									value="#{regManualGrupalController.horasSalida}" var="salida"
+									itemLabel="#{salida}" itemValue="#{salida}" />
+							</p:selectOneMenu>
+						<h:outputText value=" " />
+						<h:outputText value=" " />
+						<h:outputText value=" " />
+						<h:outputText value="Hora de Salida: " />
+						<h:outputText value=" " />
+						<p:selectOneMenu id="idhoraSalida" required="true"
+								value="#{regManualGrupalController.salidaSeleccionada}"
+								requiredMessage="Hora de entrada requerida" effect="drop">
+								<f:selectItem itemLabel="00" itemValue="" />
+								<f:selectItems
+									value="#{regManualGrupalController.horasSalida}" var="salida"
+									itemLabel="#{salida}" itemValue="#{salida}" />
+							</p:selectOneMenu>
+						<h:outputText value=" " />
+						<h:outputText value=" " />
+						<h:outputText value=" " />
+						<h:outputText value="Motivo" />
+						<h:outputText value=" " />
+						<p:selectOneMenu id="idmotivo" required="true"
+							requiredMessage="Motivo requerido" 
+							value="#{regManualGrupalController.motivoSeleccionado}">
+							<f:selectItem itemLabel="Seleccione un motivo" itemValue="" />
+							<f:selectItems value="#{regManualGrupalController.motivos}"
+								var="motivo" itemLabel="#{motivo.motivoNombre}"
+								itemValue="#{motivo.idMotivo}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+						<h:outputText value="Descripción"/>
+						<br></br>
+						<h:outputText value=" " style="margin-top:7px"/>
+						<p:inputTextarea id="descripcion" required="true" style="margin-top:7px"
+							requiredMessage="Descripcion requerida" rows="3" cols="35"
+							value="#{regManualGrupalController.descripcion}" />
+						<br></br>
+						<div align="center">
+						<p:commandButton id="regAsistencia" value="ACEPTAR"
+							style="margin-top:10px" ajax="false"
+							action="#{regManualIndivController.marcarAsistencia}">
+						</p:commandButton>
+						</div>
+				</h:form>
+				</p:dialog>
+				
+			
+
+
+			<p:dialog id="dialog" header="Tabla Docentes" style="width:420px"
+				modal="true" resizable="false" widgetVar="dialogoDocentes"
+				showEffect="puff" hideEffect="puff">
+
+				<h:form>
+					<p:dataTable id="tablaDoc" var="doc" style="width:400px"
+						emptyMessage="Docente(s) no encontrado(s)"
+						widgetVar="docentesTable" scrollable="true" scrollHeight="275"
+						liveScroll="true" scrollRows="15"
+						value="#{regManualIndivController.docentes}" rowKey="#{doc}"
+						selection="#{regManualIndivController.docSeleccionado}"
+						filteredValue="#{regManualIndivController.alumnosFiltrados}"
+						selectionMode="single">
+					<!--  
+					<p:column headerText="idDocente">
+					<h:outputText value="#{doc.idDocente}"/>
+					</p:column>
+					-->
+						<f:facet name="header">
+							<p:outputPanel style="margin:2px">
+								<h:outputText value="Buscar docente: " />
+								<p:inputText id="globalFilter" onkeyup="docentesTable.filter()" />
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column headerText="Codigo" style="width:60px"
+							filterBy="#{doc.codigo}" filterStyle="display:none"
+							filterMatchMode="contains">
+							<div align="center">#{doc.codigo}</div>
+						</p:column>
+
+						<p:column headerText="Nombre Docente"
+							filterBy="#{doc.nombre} #{doc.apPaterno} #{doc.apMaterno}"
+							filterStyle="display:none" filterMatchMode="contains">
+							<h:outputText value="#{doc.nombre}" />
+							<h:outputText value=" " />
+							<h:outputText value="#{doc.apPaterno}" />
+							<h:outputText value=" " />
+							<h:outputText value="#{doc.apMaterno}" />
+						</p:column>
+					</p:dataTable>
+					<br></br>
+					<div align="center">
+						<p:commandButton id="btnAceptar" value="SELECCIONAR"
+							action="#{regManualIndivController.verificaSeleccionado}"
+							update=":frmGenral :regIndForm" />
+					</div>
+				</h:form>
+			</p:dialog>
+
+
+			<!-- RECUPERACION -->
+			<pe:layoutPane id="lycRegRecuperacion" position="center"
+				spacingOpen="0" spacingClosed="0"
+				rendered="#{menuBean.selectedMenu == menuBean.OPT3}">
+				<f:facet name="header">  
+                   Recuperacion - Registrar
+                </f:facet>
+				<h:form id="recForm">
+					<div align="center">
+						<p:panel id="panelRec"
+							style="border:1px solid; height:100px; margin:1%; width:1000px">
+							<div align="center">
+								<h:panelGrid columns="4" cellspacing="5">
+									<h:outputText value="DOCENTE " />
+									<h:outputText value=": " />
+									<h:outputText value="#{recuperacionController.docActual}" />
+									<p:commandButton value="BUSCAR" icon="ui-icon-zoomout"
+										onclick="dialogoRec.show()" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+
+						<p:dataTable id="tableRecuperacion" var="falta"
+							emptyMessage="El Docente No tiene Faltas" widgetVar="deudasTabla"
+							value="#{recuperacionController.registrosRecuperacion}"
+							style="width:1000px;margin:1%" scrollHeight="200"
+							rowKey="#{falta}" selectionMode="single"
+							selection="#{recuperacionController.registroRecuperacionSeleccionado}"
+							filteredValue="#{recuperacionController.registrosFiltrados}">
+							<p:ajax event="rowSelect"
+								listener="#{recuperacionController.onRowSelect}"
+								update=" :frmGenral:mensajes" oncomplete="dialogprogrec.show()" />
+							<p:ajax event="rowUnselect"
+								listener="#{recuperacionController.onRowUnselect}" />
+							<f:facet name="header">
+						      DEUDAS
+							</f:facet>
+							<p:column id="cdCurso" headerText="Curso" style="width:60px"
+								filterBy="#{falta.curso}" filterStyle="display:none">
+						    	#{falta.curso}
+					        </p:column>
+							<p:column id="cdClase" headerText="Clase" style="width:60px"
+								filterBy="#{falta.tipo}" filterStyle="display:none"> 
+					        	#{falta.tipo}
+					        </p:column>
+							<p:column id="cdDeuda" headerText="Deuda" style="width:60px"
+								filterBy="#{falta.tipoDeuda}"
+								filterOptions="#{recuperacionController.tipoDeudaOpciones}"
+								filterMatchMode="exact"> 
+					         	 #{falta.tipoDeuda}
+					        </p:column>
+							<p:column id="cdMinDeuda" headerText="Minutos Deuda"
+								style="width:60px" filterBy="#{falta.minutosDeuda}"
+								filterStyle="display:none"> 
+					        #{falta.minutosDeuda}
+					        </p:column>
+							<p:column id="cdFecha" headerText="Fecha" style="width:60px"> 
+					        #{falta.fecha}
+					        </p:column>
+							<p:column id="cdEstado" headerText="Estado" style="width:60px"> 
+					        #{falta.estado}
+					        </p:column>
+							<p:column id="cdLimite" headerText="Fecha Limite"
+								style="width:60px"> 
+					        #{falta.fechaLimite}
+					        </p:column>
+							<p:column style="width:4%">
+								<p:commandButton id="selectButton" update=":recForm"
+									oncomplete="dialogDetalleRec.show()" icon="ui-icon-search"
+									title="View">
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+
+
+				</h:form>
+			</pe:layoutPane>
+			<p:dialog id="programarRecuperacionDialog"
+				header="Programar recuperacion" style="width:180px" modal="true"
+				resizable="false" widgetVar="dialogprogrec" showEffect="puff"
+				hideEffect="puff">
+				<h:form id="fdr">
+					<h:panelGrid columns="6" cellspacing="1">
+						<h:outputText value="FECHA " />
+						<h:outputText value=" " />
+						<p:calendar id="recdialogCalendar" required="true"
+							value="#{recuperacionController.fechaSeleccionada}"
+							requiredMessage="Fecha requerida" showOn="button" size="15" />
+						<h:outputText value=" " />
+						<h:outputText value="INICIO" />
+						<p:selectOneMenu id="idhoraInicio" required="true"
+							value="#{recuperacionController.inicioSeleccionado}"
+							requiredMessage="Hora de inicio requerida" effect="drop">
+							<f:selectItem itemLabel="00:00" itemValue="" />
+							<f:selectItems value="#{recuperacionController.horasInicio}"
+								var="inicio" itemLabel="#{inicio}" itemValue="#{inicio}" />
+							<p:ajax
+								listener="#{recuperacionController.establecerHorasSalida}"
+								update="idhoraFinR" />
+						</p:selectOneMenu>
+						<h:outputText value=" " />
+						<h:outputText value="FIN" />
+						<p:selectOneMenu id="idhoraFinR" required="true"
+							value="#{recuperacionController.salidaSeleccionada}"
+							requiredMessage="Hora de salida requerida" effect="drop">
+							<f:selectItem itemLabel="00:00" itemValue="" />
+							<f:selectItems value="#{recuperacionController.horasSalida}"
+								var="salida" itemLabel="#{salida}" itemValue="#{salida}" />
+						</p:selectOneMenu>
+						<h:outputText value="Motivo: " />
+						<p:selectOneMenu
+							value="#{recuperacionController.idMotivoSeleccionado}"
+							effect="fade">
+							<f:selectItem itemLabel="Seleccione" itemValue="" />
+							<f:selectItems value="#{recuperacionController.motivos}"
+								var="motivo" itemLabel="#{motivo.motivoNombre}"
+								itemValue="#{motivo.idMotivo}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellspacing="1">
+						<p:inputTextarea rows="6" cols="33"
+							value="#{recuperacionController.observacion}" />
+					</h:panelGrid>
+					<div align="center">
+						<p:commandButton id="registrarRecuperacion" value="REGISTRAR"
+							action="#{recuperacionController.validarRegistrar}"
+							update=":frmGenral :recForm">
+						</p:commandButton>
+					</div>
+
+				</h:form>
+			</p:dialog>
+			<p:dialog id="detallesRecDialog" header="Detalles de recuperacion"
+				style="width:180px" modal="true" resizable="false"
+				widgetVar="dialogDetalleRec" showEffect="puff" hideEffect="puff">
+				<div align="center">
+					<h:outputText>Detalle de recuperacion</h:outputText>
+					<h:panelGrid columns="1" cellspacing="1">
+						<h:outputText value="DETALLES DE HORARIO" />
+						<h:outputText value="DETALLES DE ASISTENCIA" />
+						<h:outputText value="DETALLES DE RECUPERACION" />
+					</h:panelGrid>
+				</div>
+			</p:dialog>
+			<p:dialog id="recDialog" header="Tabla Docentes" style="width:420px"
+				modal="true" resizable="false" widgetVar="dialogoRec"
+				showEffect="puff" hideEffect="puff">
+				<h:form>
+					<p:dataTable id="tablaDocR" var="docR" style="width:400px"
+						emptyMessage="Docente(s) no encontrado(s)"
+						widgetVar="docentesTableR" scrollable="true" scrollHeight="275"
+						liveScroll="true" scrollRows="15"
+						value="#{recuperacionController.docentes}" rowKey="#{docR}"
+						selection="#{recuperacionController.docSeleccionado}"
+						filteredValue="#{recuperacionController.docentesFiltrados}"
+						selectionMode="single">
+
+						<f:facet name="header">
+							<p:outputPanel style="margin:2px">
+								<h:outputText value="Buscar docente: " />
+								<p:inputText id="globalFilter" onkeyup="docentesTableR.filter()" />
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column headerText="Codigo" style="width:60px"
+							filterBy="#{docR.codigo}" filterStyle="display:none"
+							filterMatchMode="contains">
+							<div align="center">#{docR.codigo}</div>
+						</p:column>
+
+						<p:column headerText="Nombre Docente"
+							filterBy="#{docR.nombre} #{docR.apPaterno} #{docR.apMaterno}"
+							filterStyle="display:none" filterMatchMode="contains">
+							<h:outputText value="#{docR.nombre}" />
+							<h:outputText value=" " />
+							<h:outputText value="#{docR.apPaterno}" />
+							<h:outputText value=" " />
+							<h:outputText value="#{docR.apMaterno}" />
+						</p:column>
+					</p:dataTable>
+					<br></br>
+					<div align="center">
+						<p:commandButton id="btnAceptarRec" value="SELECCIONAR"
+							action="#{recuperacionController.verificaSeleccionado}"
+							update=":frmGenral :recForm  " />
+					</div>
+				</h:form>
+			</p:dialog>
+			<pe:layoutPane id="lycReporte" position="center" spacingOpen="0"
+				spacingClosed="0"
+				rendered="#{menuBean.selectedMenu == menuBean.OPT4}">
+				<f:facet name="header">  
+                   Reporte-Inasistencias
+                </f:facet>
+				<h:form id="reporte_form">
+					<!-- <p:growl id="mensajesReporte" showDetail="true" autoUpdate="true" closable="true"/> -->
+					<p:panel id="panelReporte" header="Seleccione las opciones"
+						style="border:2px solid;height:350px;position:absolute;top:10%;left:43%;margin-left:-100px;width:350px;">
+						<h:panelGrid columns="1" styleClass="gridEstilo" spacing="2">
+							<h:outputText value="Ciclo" />
+							<p:selectOneMenu id="idciclo"
+								value="#{reporteController.periodo.id}" effect="drop"
+								required="true" style="width:100%"
+								requiredMessage="ciclo requerido">
+								<f:selectItem itemLabel="Seleccione un ciclo" itemValue="" />
+								<f:selectItems value="#{reporteController.periodos}"
+									var="periodo" itemLabel="#{periodo.nombre}"
+									itemValue="#{periodo.id}" />
+								<p:ajax listener="#{reporteController.cambiarRangoMes}"
+									update="idmes" />
+							</p:selectOneMenu>
+							<h:outputText value=" " />
+							<h:outputText value="Mes" />
+							<p:selectOneMenu id="idmes" value="#{reporteController.mes}"
+								style="width:100%" effect="drop" required="true"
+								requiredMessage="mes requerido">
+								<f:selectItem itemLabel="Seleccione un mes" itemValue="" />
+								<f:selectItems value="#{reporteController.meses}" var="mes"
+									itemLabel="#{mes}" itemValue="#{mes}" />
+							</p:selectOneMenu>
+							<h:outputText value="Dep. Academico" />
+							<p:selectOneMenu id="iddepa"
+								value="#{reporteController.departamento.nombre}" effect="drop"
+								required="true" style="width:100%"
+								requiredMessage="departamento requerido">
+								<f:selectItem itemLabel="Seleccione un dep. academico"
+									itemValue="" />
+								<f:selectItems value="#{reporteController.departamentos}"
+									var="departamento" itemLabel="#{departamento.nombre}"
+									itemValue="#{departamento.nombre}" />
+							</p:selectOneMenu>
+							<h:outputText value=" " />
+							<h:outputText value="Escuela" />
+							<p:selectOneMenu id="idescuela"
+								value="#{reporteController.escuela.nombre}" style="width:270px;"
+								effect="drop" required="true"
+								requiredMessage="escuela requerida">
+								<f:selectItem itemLabel="Seleccione una escuela" itemValue="" />
+								<f:selectItems value="#{reporteController.escuelas}"
+									var="escuela" itemLabel="#{escuela.nombre}"
+									itemValue="#{escuela.nombre}" />
+							</p:selectOneMenu>
+							<h:outputText value=" " />
+
+							<p:commandButton id="reporteb" value="VER REPORTE"
+								style="margin-top:5%;margin-left:29%" ajax="false"
+								action="#{reporteController.generarReporte}">
+							</p:commandButton>
+
+							<!--<p:lightBox>  
+							    <h:outputLink value="#" title="Reporte Asistencia" >  
+							        <h:outputText value="Ver reporte"/>  
+							    </h:outputLink>  
+							  
+							    <f:facet name="inline">  
+							         <p:media value="/resources/reportes/ReporteAsistencia.pdf" width="830px" height="500px"/>
+							    </f:facet>  
+							</p:lightBox>-->
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="south" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoFooter"
+					style="width:100%;height:40px">
+					<h:form
+						style="text-align:left;color:#FFFFFF;margin-left:10px;font-weight: bold">
+						<h:outputText value="SISCADWEB - Area de Desarrollo de Software" />
+					</h:form>
+
+					<h:form style="text-align:right">
+						<p:commandLink id="endSesion" action="#{loginController.logout}">
+							<p:graphicImage value="/resources/img/salir5.png"
+								style="width:33px;height:33px" />
+							<!--<h:outputText value="CERRAR SESION" style="color:#FFFFFF;font-weight: bold; margin-right:4px"/>  -->
+						</p:commandLink>
+						<p:tooltip for="endSesion" value="Cerrar Sesión" showEffect="clip"
+							hideEffect="explode" />
+
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+		</pe:layout>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>Sistema de Asistencia Docente</title>
+		</f:facet>
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/resources/css/atencionEstilo.css" />
+	</h:head>
+	<h:body id="cuerpo">
+		<pe:layout fullPage="true" id="layoutAll">
+			<pe:layoutPane position="north" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoEncabezado"
+					style="width:100%;">
+					<h:form style="text-align:left;">
+						<iframe	src="/siscadweb/resources/encabezados/izquierdo/izquierdo.html"
+							width="250px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true">
+						</iframe>
+					</h:form>
+
+					<h:form style="text-align:right;">
+						<iframe	src="/siscadweb/resources/encabezados/derecho/derecho.html"
+							width="400px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true">
+						</iframe>
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="west" spacingOpen="0" spacingClosed="0"
+				style="width:30px">
+				<f:facet name="header"> Opciones </f:facet>
+				<h:form id="frmGenral">
+					<p:growl id="mensajes" sticky="true" />
+					<p:panelMenu>
+						<p:submenu label="Mis Asistencias" style="font-size:10px">
+							<p:menuitem value="Consultar Historial"
+								actionListener="#{menuBean.setSelectedMenu(menuBean.OPT1)}"
+								update="layoutAll" ajax="false" icon="ui-icon-arrowrefresh-1-w" />
+						</p:submenu>
+					</p:panelMenu>
+				</h:form>
+			</pe:layoutPane>
+			<!-- Consulta de Asistencia - Inicio -->
+				<!-- Lista de Cursos -->
+			<pe:layoutPane id="lycConsultAsist" position="center" spacingOpen="0" spacingClosed="0"
+				rendered="#{menuBean.selectedMenu == menuBean.OPT1}">
+				<f:facet name="header">  
+                   Mis Asistencias - Consultar Historial
+                </f:facet>
+				<h:form id="idFormConsult">
+					<div align="center">
+						<h:panelGrid columns="1" cellspacing="6" style="width:800px;margin-top:5px;padding:0px">
+							<p:panel id="panelInfo"
+								style="border:1px solid;">		
+								<h:panelGrid columns="30" cellspacing="1">
+									<h:outputText value="LISTADO DE CURSOS " />
+									<h:outputText value=" " />
+									<h:outputText value="CICLO : " />
+									<h:outputText value="#{consultAsistController.periodoActual.nombre}" />
+								</h:panelGrid>
+							</p:panel>
+						</h:panelGrid>
+						<p:dataTable id="tableConsulAsist" var="curso" value="#{consultAsistController.cursosDocente}"
+							emptyMessage="Asistencia(s) no encontrada(s)"
+							style="width:900px;margin:1%;height:400px"
+							scrollable="true" scrollHeight="400">
+							<f:facet name="header">
+		                        Historial de Asistencias
+		                    </f:facet>
+							<p:column headerText="Codigo del Curso" style="width:120px">  
+					            <div align="center">
+					            	#{curso.codigoCurso}
+					            </div>  
+					        </p:column>
+							<p:column headerText="Nombre del Curso">  
+					            #{curso.nombre}  
+					        </p:column>
+							<p:column headerText="Grupo" style="width:40px">
+								<p:selectOneMenu id="idGrupo" required="true" effect="drop"
+									value="#{curso.grupoSeleccionado}">
+									<f:selectItems value="#{curso.grupos}" var="grupo"
+										itemLabel="#{grupo.numGrupo}" itemValue="#{grupo.idGrupo}" />
+								</p:selectOneMenu>
+					        </p:column>
+							<p:column headerText="Escuela" style="width:190px"> 
+								<div align="center">  
+					            	#{curso.escuela}
+					            </div>  
+					        </p:column>
+							<p:column headerText="Asistencia" style="width:80px">
+								<div align="center">
+                                    <p:commandLink
+                                        actionListener="#{consultAsistController.verCurso(menuBean, curso)}"
+                                        update="cuerpo:layoutAll" ajax="false">
+                                        <h:outputText value="Ver" />
+                                    </p:commandLink>
+                                </div>
+					        </p:column>
+						</p:dataTable>
+					</div>
+				</h:form>
+			</pe:layoutPane>
+				<!-- Detalle del Curso Seleccionado -->
+			<pe:layoutPane id="lycConsultAsistDetalle" position="center" spacingOpen="0" spacingClosed="0"
+				rendered="#{menuBean.selectedMenu == menuBean.OPT2}">
+				<f:facet name="header">  
+                   Mis Asistencias - Consultar Historial
+                </f:facet>
+				<h:form id="idFormDetalle">
+					<div align="center">
+						<h:panelGrid columns="3" style="width:1100px;margin-top:5px;padding:0px">
+							<p:panel id="panelInfoResumen" style="border:1px solid;">		
+								<h:panelGrid columns="3" >
+									<h:outputText value="COD. CURSO " />
+									<h:outputText value=":" />
+									<h:outputText value="#{consultAsistController.cursoSeleccionado.codigoCurso} " />
+									<h:outputText value="NOMBRE DE CURSO " />
+									<h:outputText value=":" />
+									<h:outputText value="#{consultAsistController.cursoSeleccionado.nombre}" />
+									<h:outputText value="GRUPO " />
+									<h:outputText value=":" />
+									<h:outputText value="#{consultAsistController.cursoSeleccionado.numGrupoSeleccionado}" />
+								</h:panelGrid>
+							</p:panel>
+							<p:panel id="panelInfoResumen2" style="border:1px solid;">		
+									<p:commandButton id="registrar" value="RESUMEN" 
+										style="border:1px orange solid;margin-left:350px"
+										icon="ui-icon-check" onclick="dialogo.show();" update=":frmGenral">
+									</p:commandButton>
+							</p:panel>
+						</h:panelGrid>
+						<p:dataTable id="tableAsistencia" var="asistencia"
+							value="#{consultAsistController.asistencias}"
+							emptyMessage="Asistencia(s) no encontrada(s)" style="width:900px;margin:1%;height:400px"
+							widgetVar="asistGrupalTable" scrollable="true" scrollHeight="400">
+							<f:facet name="header">
+		                        Asistencias
+		                    </f:facet>							
+							<p:column headerText="Fecha">
+								<div align="center">
+					            	#{asistencia.fecha}
+					            </div>
+					        </p:column>
+							<p:column headerText="Tipo Clase">
+								<div align="center">  
+					            	#{asistencia.tipo}
+					            </div>  
+					        </p:column>
+							<p:column headerText="Hora Inicio">
+					            <div align="center">
+					            	#{asistencia.inicio}
+					            </div> 
+					        </p:column>
+							<p:column headerText="Hora Fin" >
+								<div align="center">  
+					            	#{asistencia.salida}
+					            </div>  
+					        </p:column>
+							<p:column headerText="Tipo Marca"> 
+								<div align="center"
+									style="#{asistencia.tipoMarca == 'NO ASIS' ? 'color: red': 'color: green'}">
+					            	#{asistencia.tipoMarca}
+					            </div>  
+					        </p:column>
+							<p:column headerText="Detalle" style="width:40px">
+								<div align="center">
+									<p:commandButton
+										disabled="#{not asistencia.detalle}" icon="ui-icon-search">
+									</p:commandButton>
+								</div>
+					        </p:column>
+							<p:column headerText="Recuperacion">
+								<div align="center">  
+					            	#{asistencia.recuperacion}
+					            </div>  
+					        </p:column>
+						</p:dataTable>
+					</div>
+				</h:form>
+			</pe:layoutPane>
+			<!-- Consulta de Asistencia - Fin -->
+			<pe:layoutPane position="south" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoFooter"
+					style="width:100%;height:40px">
+					<h:form
+						style="text-align:left;color:#FFFFFF;margin-left:10px;font-weight: bold">
+						<h:outputText value="SISCADWEB - Area de Desarrollo de Software" />
+					</h:form>
+					<h:form style="text-align:right">
+						<p:commandLink id="endSesion" action="#{loginController.logout}">
+							<p:graphicImage value="/resources/img/salir5.png"
+								style="width:33px;height:33px" />
+						</p:commandLink>
+						<p:tooltip for="endSesion" value="Cerrar Sesión" showEffect="clip"
+							hideEffect="explode" />
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+		</pe:layout>
+	</h:body>
+</f:view>
+</html>

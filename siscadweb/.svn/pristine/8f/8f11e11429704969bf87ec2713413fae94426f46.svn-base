@@ -1,0 +1,48 @@
+package pe.edu.sistemas.siscadweb.mappers;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Select;
+
+import pe.edu.sistemas.siscadweb.entities.CursoPeriodo;
+
+public interface CursoPeriodoMapper {
+	@Select("select cp.idcurso_periodo as idCurso,"
+			+ "cp.curso_periodo_nombre as nombre,"
+			+ "cp.periodo_idperiodo as periodo,"
+			+ "g.idgrupo as idGrupo,"
+			+ "g.grupo_numero as numGrupo "
+			+ "from CURSO_PERIODO cp, GRUPO g "
+			+ "where cp.idcurso_periodo = g.curso_idcurso")
+	List<CursoPeriodo> obtenerCursos();
+	
+	@Select("select cp.idcurso_periodo as idCurso,"
+			+ "cp.curso_periodo_nombre as nombre,"
+			+ "cp.periodo_idperiodo as periodo,"
+			+ "g.idgrupo as idGrupo,"
+			+ "g.grupo_numero as numGrupo "
+			+ "from CURSO_PERIODO cp, GRUPO g "
+			+ "where cp.idcurso_periodo = g.curso_idcurso " 
+			+ "and cp.periodo_idperiodo = #{idPeriodo} ")
+	List<CursoPeriodo> obtenerCursosxPeriodo(int idPeriodo);
+	
+	@Select("select cp.idcurso_periodo as idCurso,"
+			+ "cp.curso_periodo_nombre as nombre,"
+			+ "cp.periodo_idperiodo as periodo,"
+			+ "g.idgrupo as idGrupo,"
+			+ "g.grupo_numero as numGrupo "
+			+ "from CURSO_PERIODO cp, GRUPO g "
+			+ "where cp.idcurso_periodo = g.curso_idcurso "
+			+ "and cp.idcurso = #{idCurso} ")
+	List<CursoPeriodo> obtenerCursosxIdCurso(int idCurso);
+	
+	@Select("select cp.idcurso_periodo as idCurso,"
+			+ "cp.curso_periodo_nombre as nombre,"
+			+ "cp.periodo_idperiodo as periodo,"
+			+ "g.idgrupo as idGrupo,"
+			+ "g.grupo_numero as numGrupo "
+			+ "from CURSO_PERIODO cp, GRUPO g "
+			+ "where cp.idcurso_periodo = g.curso_idcurso "
+			+ "and g.idgrupo = #{idGrupo} ")
+	CursoPeriodo obtenerCursosxIdGrupo(int idGrupo);
+}

@@ -1,0 +1,50 @@
+package pe.edu.sistemas.siscadweb.entities;
+
+public class CursoPeriodo {
+	private int idCurso;
+	private String nombre;
+	private int periodo;
+	private int idGrupo;
+	private int numGrupo;
+	
+	public int getIdCurso() {
+		return idCurso;
+	}
+	
+	public void setIdCurso(int idCurso) {
+		this.idCurso = idCurso;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public int getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(int periodo) {
+		this.periodo = periodo;
+	}
+
+	public int getIdGrupo() {
+		return idGrupo;
+	}
+
+	public void setIdGrupo(int idGrupo) {
+		this.idGrupo = idGrupo;
+	}
+
+	public int getNumGrupo() {
+		return numGrupo;
+	}
+
+	public void setNumGrupo(int numGrupo) {
+		this.numGrupo = numGrupo;
+	}
+}
+

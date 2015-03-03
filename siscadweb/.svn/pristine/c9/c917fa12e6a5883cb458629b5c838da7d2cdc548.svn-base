@@ -1,0 +1,31 @@
+package pe.edu.sistemas.siscadweb.repositories;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import pe.edu.sistemas.siscadweb.entities.CursoPeriodo;
+import pe.edu.sistemas.siscadweb.mappers.CursoPeriodoMapper;
+
+@Repository
+public class CursoPeriodoRepository {
+	@Autowired
+	private CursoPeriodoMapper cursoPeriodoMapper;
+	
+	public List<CursoPeriodo> obtenerCursos(){
+		return cursoPeriodoMapper.obtenerCursos();
+	}
+	
+	public List<CursoPeriodo> obtenerCursosxIdCurso(int idCurso){
+		return cursoPeriodoMapper.obtenerCursosxIdCurso(idCurso);
+	}
+	
+	public CursoPeriodo obtenerCursosxIdGrupo(int idGrupo){
+		return cursoPeriodoMapper.obtenerCursosxIdGrupo(idGrupo);
+	}
+	
+	public List<CursoPeriodo> obtenerCursosxPeriodo(int idPeriodo){
+		return cursoPeriodoMapper.obtenerCursosxPeriodo(idPeriodo);
+	}
+}

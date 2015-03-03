@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<locale-config>
+		</locale-config>
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>messages</var>
+		</resource-bundle>
+	</application>
+
+	<navigation-rule>
+		<display-name>login.xhtml</display-name>
+		<from-view-id>/common/login.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.login}</from-action>
+			<from-outcome>atencionHome</from-outcome>
+			<to-view-id>/atencion_docente/index_atencion.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+        <from-view-id>/atencion_docente/*</from-view-id>
+        <navigation-case>
+            <from-action>#{loginController.logout}</from-action>
+            <from-outcome>loggedout</from-outcome>
+            <to-view-id>/common/login.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+	
+	<navigation-rule>
+		<display-name>login.xhtml</display-name>
+		<from-view-id>/common/login.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.login}</from-action>
+			<from-outcome>docenteHome</from-outcome>
+			<to-view-id>/docente/index_docente.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>login.xhtml</display-name>
+		<from-view-id>/common/login.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.login}</from-action>
+			<from-outcome>seleccionRoles</from-outcome>
+			<to-view-id>/common/seleccion_roles.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<display-name>seleccion_roles.xhtml</display-name>
+		<from-view-id>/common/seleccion_roles.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.irAdministrador}</from-action>
+			<from-outcome>irAdministrador</from-outcome>
+			<to-view-id>/atencion_docente/index_atencion.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>seleccion_roles.xhtml</display-name>
+		<from-view-id>/common/seleccion_roles.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.irDocente}</from-action>
+			<from-outcome>irDocente</from-outcome>
+			<to-view-id>/docente/index_docente.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>seleccion_roles.xhtml</display-name>
+		<from-view-id>/common/seleccion_roles.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.irAtencionDocente}</from-action>
+			<from-outcome>irAtencionDocente</from-outcome>
+			<to-view-id>/atencion_docente/index_atencion.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>seleccion_roles.xhtml</display-name>
+		<from-view-id>/common/seleccion_roles.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.irEscuelaSistemas}</from-action>
+			<from-outcome>irEscuelaSistemas</from-outcome>
+			<to-view-id>/escuela/sistemas/index_sistemas.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>seleccion_roles.xhtml</display-name>
+		<from-view-id>/common/seleccion_roles.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.irEscuelaSoftware}</from-action>
+			<from-outcome>irEscuelaSoftware</from-outcome>
+			<to-view-id>/escuela/software/index_software.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>seleccion_roles.xhtml</display-name>
+		<from-view-id>/common/seleccion_roles.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{loginController.irSoporte}</from-action>
+			<from-outcome>irSoporte</from-outcome>
+			<to-view-id>/soporte/inde_soporte.xhtml</to-view-id>
+			<redirect></redirect>
+		</navigation-case>
+	</navigation-rule>
+	
+</faces-config>	
+      

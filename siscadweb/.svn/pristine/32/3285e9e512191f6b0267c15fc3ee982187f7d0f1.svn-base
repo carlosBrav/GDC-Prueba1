@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#common#login.xhtml"
+  PATH="/common/login.xhtml" SHAPE="240,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#common#login.xhtml:0" NAME="item"
+   PATH="/common/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="atencionHome:#{loginController.login}:#atencion_docente#index_atencion.xhtml"
+    NAME="output" PATH="/atencion_docente/index_atencion.xhtml"
+    TARGET="rules:#atencion_docente#index_atencion.xhtml"
+    TITLE="#{loginController.login}:atencionHome" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#login.xhtml:1" NAME="item1"
+   PATH="/common/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="docenteHome:#{loginController.login}:#docente#index_docente.xhtml"
+    NAME="output" PATH="/docente/index_docente.xhtml"
+    TARGET="rules:#docente#index_docente.xhtml"
+    TITLE="#{loginController.login}:docenteHome" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#login.xhtml:2" NAME="item2"
+   PATH="/common/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="seleccionRoles:#{loginController.login}:#common#seleccion_roles.xhtml"
+    NAME="output" PATH="/common/seleccion_roles.xhtml"
+    TARGET="rules:#common#seleccion_roles.xhtml"
+    TITLE="#{loginController.login}:seleccionRoles" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#atencion_docente#*"
+  PATH="/atencion_docente/*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#atencion_docente#*:0" NAME="item"
+   PATH="/atencion_docente/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="loggedout:#{loginController.logout}:#common#login.xhtml"
+    NAME="output" PATH="/common/login.xhtml"
+    TARGET="rules:#common#login.xhtml"
+    TITLE="#{loginController.logout}:loggedout" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#atencion_docente#index_atencion.xhtml"
+  PATH="/atencion_docente/index_atencion.xhtml" SHAPE="664,32,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#docente#index_docente.xhtml"
+  PATH="/docente/index_docente.xhtml" SHAPE="536,184,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#common#seleccion_roles.xhtml"
+  PATH="/common/seleccion_roles.xhtml" SHAPE="320,288,50,121" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#common#seleccion_roles.xhtml:0" NAME="item"
+   PATH="/common/seleccion_roles.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrador:#{loginController.irAdministrador}:#atencion_docente#index_atencion.xhtml"
+    NAME="output" PATH="/atencion_docente/index_atencion.xhtml"
+    TARGET="rules:#atencion_docente#index_atencion.xhtml"
+    TITLE="#{loginController.irAdministrador}:irAdministrador" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#seleccion_roles.xhtml:1" NAME="item1"
+   PATH="/common/seleccion_roles.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irDocente:#{loginController.irDocente}:#docente#index_docente.xhtml"
+    NAME="output" PATH="/docente/index_docente.xhtml"
+    TARGET="rules:#docente#index_docente.xhtml"
+    TITLE="#{loginController.irDocente}:irDocente" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#seleccion_roles.xhtml:2" NAME="item2"
+   PATH="/common/seleccion_roles.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irAtencionDocente:#{loginController.irAtencionDocente}:#atencion_docente#index_atencion.xhtml"
+    NAME="output" PATH="/atencion_docente/index_atencion.xhtml"
+    TARGET="rules:#atencion_docente#index_atencion.xhtml"
+    TITLE="#{loginController.irAtencionDocente}:irAtencionDocente" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#seleccion_roles.xhtml:3" NAME="item3"
+   PATH="/common/seleccion_roles.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irEscuelaSistemas:#{loginController.irEscuelaSistemas}:#escuela#sistemas#index_sistemas.xhtml"
+    NAME="output" PATH="/escuela/sistemas/index_sistemas.xhtml"
+    TARGET="rules:#escuela#sistemas#index_sistemas.xhtml"
+    TITLE="#{loginController.irEscuelaSistemas}:irEscuelaSistemas" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#seleccion_roles.xhtml:4" NAME="item4"
+   PATH="/common/seleccion_roles.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irEscuelaSoftware:#{loginController.irEscuelaSoftware}:#escuela#software#index_software.xhtml"
+    NAME="output" PATH="/escuela/software/index_software.xhtml"
+    TARGET="rules:#escuela#software#index_software.xhtml"
+    TITLE="#{loginController.irEscuelaSoftware}:irEscuelaSoftware" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#common#seleccion_roles.xhtml:5" NAME="item5"
+   PATH="/common/seleccion_roles.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irSoporte:#{loginController.irSoporte}:#soporte#inde_soporte.xhtml"
+    NAME="output" PATH="/soporte/inde_soporte.xhtml"
+    TARGET="rules:#soporte#inde_soporte.xhtml"
+    TITLE="#{loginController.irSoporte}:irSoporte" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#escuela#sistemas#index_sistemas.xhtml"
+  PATH="/escuela/sistemas/index_sistemas.xhtml" SHAPE="656,488,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#escuela#software#index_software.xhtml"
+  PATH="/escuela/software/index_software.xhtml" SHAPE="752,561,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#soporte#inde_soporte.xhtml"
+  PATH="/soporte/inde_soporte.xhtml" SHAPE="752,593,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

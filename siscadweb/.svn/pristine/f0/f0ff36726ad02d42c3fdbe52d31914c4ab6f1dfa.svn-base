@@ -1,0 +1,104 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, sans-serif;
+	font-size: 11px
+}
+
+.fondoEncabezado {
+	background-color: #000000 !important;
+}
+
+.fondoFooter {
+	/*background-color: #000000 !important;*/
+	background-image: -webkit-linear-gradient( rgba(0, 0, 0, 0.9), rgba(22, 35, 41, 0.9));
+	background-image: -moz-linear-gradient( rgba(0, 0, 0, 0.9), rgba(20, 32, 37, 0.9));
+}
+
+#lycReporte{
+	padding: 0px;
+	background-image: url("/siscadweb/resources/img/fondoPanel2.JPG");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	/*height: 140px;*/
+	/* text-indent:-9999px;*/
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+
+#lycRegAsistIndiv{
+	padding: 0px;
+	background-image: url("/siscadweb/resources/img/fondoPanel2.JPG");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	/*height: 140px;*/
+	/* text-indent:-9999px;*/
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+
+#lycRegAsistGrupal {
+	padding: 0px;
+	background-image: url("/siscadweb/resources/img/fondoPanel2.JPG");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	/*height: 140px;*/
+	/* text-indent:-9999px;*/
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+
+#lycRegRecuperacion {
+	padding: 0px;
+	background-image: url("/siscadweb/resources/img/fondoPanel2.JPG");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	/*height: 140px;*/
+	/* text-indent:-9999px;*/
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+
+
+.gridEstilo{
+	position: absolute;
+	height: 100px;
+	top: 0px;
+	bottom: 0;
+	margin:auto;
+	margin-left:20px;
+	margin-top:50px;
+}
+
+/*Para modificar estilos predefinidos del primefaces*/
+
+.pe-layout-pane-content {
+	padding: 0px;
+	overflow:auto;
+}
+
+/*
+.ui-corner-all {
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+}*/
+
+.ui-widget-overlay {
+	background: #000000 url("/siscadweb/javax.faces.resource/images/ui-bg_highlight-hard_40_aaaaaa_1x100.png.jsf?ln=primefaces-black-tie") 50% top repeat-x;
+	opacity: .30;
+	filter: Alpha(Opacity=30);
+}
+
+.DataTable table>thead>tr>th,.DataTable table>tbody,.DataTable table>tbody>tr,.DataTable table>tbody>tr>td
+	{
+	border: none !important;
+}

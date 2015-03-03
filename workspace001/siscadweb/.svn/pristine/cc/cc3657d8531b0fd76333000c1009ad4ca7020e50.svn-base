@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>..::Sistema de Asistencia Docente::..</title>
+		</f:facet>
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/resources/css/loginEstilo.css" />
+	</h:head>
+
+<style type="text/css">
+
+.fondo {
+	background-color: #404040 !important;
+}
+
+</style>
+
+	<h:body>
+
+		<pe:layout fullPage="true">
+			<pe:layoutPane position="north" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoEncabezado"
+					style="width:100%;">
+					<h:form style="text-align:left;">
+						<iframe
+							src="/siscadweb/resources/encabezados/izquierdo/izquierdo.html"
+							width="250px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+
+					</h:form>
+
+					<h:form style="text-align:right;">
+						<iframe
+							src="/siscadweb/resources/encabezados/derecho/derecho.html"
+							width="400px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+
+			<pe:layoutPane id="lycLogin" position="center" style="padding:0">
+				<h:form prependId="false" id="login_form">
+					<p:growl id="idGrowl" for="mensajes" sticky="true" />
+					<p:panel id="panelLogin" header="Seleccion de Roles" styleClass="fondo"
+					style="margin-top:12%;font-size:13px; color:#101010; height:200px">
+						<p:dock position="top" itemWidth="120" styleClass="fondo" style="color:#101010;font-weight: bold">
+							<p:menuitem value="ADMINISTRADOR" actionListener="#{loginController.irAdministrador}" rendered="#{loginController.administrador}" icon="/resources/img/roles/administrador.png"/>
+							<p:menuitem value="DOCENTE" actionListener="#{loginController.irDocente}" rendered="#{loginController.docente}" icon="/resources/img/roles/docente.png"/>
+							<p:menuitem value="ATENCION AL DOCENTE" actionListener="#{loginController.irAtencionDocente}" rendered="#{loginController.atencionDocente}" icon="/resources/img/roles/huella.jpg"/>
+							<p:menuitem value="ESCUELA DE SISTEMAS" actionListener="#{loginController.irEscuelaSistemas}" rendered="#{loginController.escuelaSistemas}" icon="/resources/img/roles/docente.png"/>
+							<p:menuitem value="ESCUELA DE SOFTWARE" actionListener="#{loginController.irEscuelaSoftware}" rendered="#{loginController.escuelaSoftware}" icon="/resources/img/roles/docente.png"/>
+							<p:menuitem value="SOPORTE TECNICO" actionListener="#{loginController.irSoporte}" rendered="#{loginController.soporteTecnico}" icon="/resources/img/roles/soporte.png"/>
+						</p:dock>
+					</p:panel>
+				</h:form>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="south" closable="false" resizable="false"
+			style="padding:0">
+			<h:panelGrid columns="2" styleClass="fondoFooter"
+				style="width:100%;height:40px">
+				<h:form
+					style="text-align:left;color:#FFFFFF;margin-left:10px;font-weight: bold">
+					<h:outputText
+						value="SISCADWEB - Area de Desarrollo de Software" />
+				</h:form>
+
+				<h:form style="text-align:right">
+					<p:commandLink id="endSesion" action="#{loginController.logout}">
+						<p:graphicImage value="/resources/img/salir5.png"
+							style="width:33px;height:33px" />
+						<!--<h:outputText value="CERRAR SESION" style="color:#FFFFFF;font-weight: bold; margin-right:4px"/>  -->
+					</p:commandLink>
+					<p:tooltip for="endSesion" value="Cerrar Sesión" showEffect="clip"
+						hideEffect="explode" />
+
+				</h:form>
+			</h:panelGrid>
+		</pe:layoutPane>
+
+
+
+		</pe:layout>
+
+
+	</h:body>
+</f:view>
+</html>

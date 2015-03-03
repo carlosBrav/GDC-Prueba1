@@ -1,0 +1,85 @@
+package pe.edu.sistemas.siscadweb.mappers;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import pe.edu.sistemas.siscadweb.entities.HorarioClase;
+
+public interface HorarioClaseMapper {
+	@Select ("select idhorario_clase as idHorarioClase,"
+			+ "hora_inicio as horaInicio,"
+			+ "hora_fin as horaFin,"
+			+ "grupo_idgrupo as idGrupo,"
+			+ "aula as aula,"
+			+ "dia as dia,"
+			+ "docente_iddocente as idDocente,"
+			+ "horario_clase_tipo as horarioClaseTipo,"
+			+ "horario_clase_periodo as horarioClasePeriodo "
+			+ "from HORARIO_CLASE")
+	List<HorarioClase> obtenerHorariosClase();
+	
+	@Select ("select idhorario_clase as idHorarioClase,"
+			+ "hora_inicio as horaInicio,"
+			+ "hora_fin as horaFin,"
+			+ "grupo_idgrupo as idGrupo,"
+			+ "aula as aula,"
+			+ "dia as dia,"
+			+ "docente_iddocente as idDocente,"
+			+ "horario_clase_tipo as horarioClaseTipo,"
+			+ "horario_clase_periodo as horarioClasePeriodo "
+			+ "from HORARIO_CLASE "
+			+ "where horario_clase_periodo = #{periodo} "
+			+ "and dia = #{dia} ")
+	List<HorarioClase> obtenerHorariosClasexPeriodoyDia(@Param("periodo") String periodo, @Param("dia") int dia);
+	
+	@Select ("select idhorario_clase as idHorarioClase,"
+			+ "hora_inicio as horaInicio,"
+			+ "hora_fin as horaFin,"
+			+ "grupo_idgrupo as idGrupo,"
+			+ "aula as aula,"
+			+ "dia as dia,"
+			+ "docente_iddocente as idDocente,"
+			+ "horario_clase_tipo as horarioClaseTipo,"
+			+ "horario_clase_periodo as horarioClasePeriodo "
+			+ "from HORARIO_CLASE "
+			+ "where horario_clase_periodo = #{periodo} "
+			+ "and dia = #{dia} "
+			+ "and #{hInicio} <= hora_inicio "
+			+ "and hora_fin <= #{hFin}")
+	List<HorarioClase> obtenerHorariosClasexPeriodoxDiayHora(@Param("periodo") String periodo, @Param("dia") int dia,
+															 @Param("hInicio") String hInicio, @Param("hFin") String hFin);
+	
+	@Select ("SELECT idhorario_clase as idHorarioClase,"
+			+ "hora_inicio as horaInicio, "
+			+ "hora_fin as horaFin,"
+			+ "grupo_idgrupo as idGrupo, "
+			+ "aula as aula, "
+			+ "dia as dia, "
+			+ "docente_iddocente as idDocente, "
+			+ "horario_clase_tipo as horarioClaseTipo, "
+			+ "horario_clase_periodo as horarioClasePeriodo "
+			+"from HORARIO_CLASE "
+			+"WHERE horario_clase_periodo = #{periodo}  "
+			+"AND dia >=  #{diaInicial} "
+			+"AND dia <=  #{diaFin} "
+			+"AND docente_iddocente =  #{idDocente} ")
+	List<HorarioClase> obtenerHorariosClasexPeriodoxDiaxIdDocente(@Param("periodo") String periodo, @Param("diaInicial") int diaInicial,
+																  @Param("diaFin") int diaFinal, @Param("idDocente") int idDocente);
+
+	@Select ("SELECT idhorario_clase as idHorarioClase,"
+			+ "hora_inicio as horaInicio, "
+			+ "hora_fin as horaFin,"
+			+ "grupo_idgrupo as idGrupo, "
+			+ "aula as aula, "
+			+ "dia as dia, "
+			+ "docente_iddocente as idDocente, "
+			+ "horario_clase_tipo as horarioClaseTipo, "
+			+ "horario_clase_periodo as horarioClasePeriodo "
+			+"from HORARIO_CLASE "
+			+"WHERE horario_clase_periodo = #{periodo}  "
+			+"AND docente_iddocente =  #{idDocente} ")
+	List<HorarioClase> obtenerHorariosClasexPeriodoxIdDocente(@Param("periodo") String periodo, 
+															 @Param("idDocente") int idDocente);
+}

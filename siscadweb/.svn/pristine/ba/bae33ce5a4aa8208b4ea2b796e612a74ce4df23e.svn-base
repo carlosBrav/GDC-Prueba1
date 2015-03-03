@@ -1,0 +1,292 @@
+package pe.edu.sistemas.siscadweb.controller;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.context.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import pe.edu.sistemas.siscadweb.entities.Motivo;
+import pe.edu.sistemas.siscadweb.entities.Periodo;
+import pe.edu.sistemas.siscadweb.entities.RegistroManual;
+import pe.edu.sistemas.siscadweb.repositories.MotivoRepository;
+import pe.edu.sistemas.siscadweb.repositories.PeriodoRepository;
+import pe.edu.sistemas.siscadweb.services.RegistroManualService;
+import pe.edu.sistemas.siscadweb.util.RegistroManualDataModel;
+
+@ManagedBean
+@SessionScoped
+@Component
+public class RegManualGrupalController{
+	private List<RegistroManual> regManuales;
+	private List<Motivo> motivos;
+	private List<String> horasInicio;
+	private List<String> horasSalida;
+	
+	private RegistroManualDataModel regManualDataModel;
+	private boolean showDialog;
+		
+	private java.util.Date fechaSeleccionada;
+	private String inicioSeleccionado;
+	private String salidaSeleccionada;
+	
+	private Date fecha;
+	private String ciclo;
+	private int motivoSeleccionado;
+	private String descripcion;
+	private RegistroManual regSeleccionados[];
+	
+	@Autowired
+	private RegistroManualService registroManualService;
+	@Autowired
+	private MotivoRepository motivoRepository;
+	@Autowired
+	private PeriodoRepository periodoRepository;
+	
+	public RegManualGrupalController(){
+	}
+	@PostConstruct
+	public void init(){
+		try{
+			setShowDialog(false);
+			motivos = motivoRepository.obtenerMotivos(2);
+			horasInicio = new ArrayList<String>();
+			horasInicio.add("08:00");
+			horasInicio.add("09:00");
+			for(int i = 10; i < 21; i++){
+				horasInicio.add(i + ":00");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void establecerHorasSalida(){
+		try{
+			int i = horasInicio.indexOf(inicioSeleccionado) + 2 ;
+			
+			horasSalida = new ArrayList<String>();
+			while(i < horasInicio.size()){
+				horasSalida.add(horasInicio.get(i));
+				i++;
+			}
+			horasSalida.add("21:00");
+			horasSalida.add("22:00");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void buscarAsistencias(){
+		try{
+			SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
+			
+			fecha = Date.valueOf(fechaFormato.format(fechaSeleccionada));
+			validarFecha();
+			ciclo = periodoRepository.obtenerUltimoPeriodo().getNombre();
+			regManuales = registroManualService.obtenerAsistencias(fecha, inicioSeleccionado, salidaSeleccionada, ciclo);
+			regManualDataModel = new RegistroManualDataModel(regManuales);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void marcarAsistencias(){
+		try{
+			if(regSeleccionados.length == 0){
+				return;
+			}
+			for(int i = 0; i < regSeleccionados.length; i++){
+				if(regSeleccionados[i].getEntrada().equals("NO ASIS")){
+					registroManualService.marcarAsistencia(regSeleccionados[i].getHoraEntrada(),
+														   regSeleccionados[i].getHoraSalida(),
+														   "Mi tema",
+														   fecha,
+														   descripcion,
+														   regSeleccionados[i].getIdHorario(),
+														   motivoSeleccionado
+					);
+				}
+			}
+			regManuales = registroManualService.obtenerAsistencias(fecha, inicioSeleccionado, salidaSeleccionada, ciclo);
+			regManualDataModel = new RegistroManualDataModel(regManuales);
+			showDialog = false;
+			regSeleccionados = new RegistroManual[0];
+			FacesContext context = FacesContext.getCurrentInstance();  
+            context.addMessage("mensajes", new FacesMessage(FacesMessage.SEVERITY_INFO,
+            												"Asistencias registradas con éxito", null));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void validarRegistrar(){
+		if(regManuales != null){
+			if(regManuales.size() > 0){
+				if(this.regSeleccionados.length > 0){
+					showDialog = true;
+					RequestContext context = RequestContext.getCurrentInstance();
+					context.execute("dialogo.show();");
+				}
+				else{
+					FacesContext context = FacesContext.getCurrentInstance();  
+		            context.addMessage("mensajes", new FacesMessage(FacesMessage.SEVERITY_WARN,
+		            												"No hay asistencias seleccionadas", null));
+				}
+			}
+			else{
+				FacesContext context = FacesContext.getCurrentInstance();  
+	            context.addMessage("mensajes", new FacesMessage(FacesMessage.SEVERITY_WARN,
+	            												"No existen asistencias", null));
+			}
+		}
+		else{
+			FacesContext context = FacesContext.getCurrentInstance();  
+            context.addMessage("mensajes", new FacesMessage(FacesMessage.SEVERITY_WARN,
+            												"No existen asistencias", null));
+		}
+	}
+	
+	public void validarFecha(){
+		try{
+			Periodo periodo;
+			Date diaInicio;
+			Date diaFinal;
+			FacesContext context;
+			
+			periodo = periodoRepository.obtenerUltimoPeriodo();
+			diaInicio = Date.valueOf(periodo.getFechaInicio());
+			diaFinal = Date.valueOf(periodo.getFechaFin());
+
+			if(fecha.before(diaInicio)){
+				fecha = diaInicio;
+				fechaSeleccionada = new java.util.Date(fecha.getTime());
+				context = FacesContext.getCurrentInstance();  
+	            context.addMessage("mensajes", new FacesMessage(FacesMessage.SEVERITY_WARN,
+	            		"Fecha seleccionada fuera de rango, el resultado corresponde al inicio de ciclo.", null));
+			}else if(fecha.after(diaFinal)){
+				fecha = diaFinal;
+				fechaSeleccionada = new java.util.Date(fecha.getTime());
+				context = FacesContext.getCurrentInstance();  
+	            context.addMessage("mensajes", new FacesMessage(FacesMessage.SEVERITY_WARN,
+	            		"Fecha seleccionada fuera de rango, el resultado corresponde al final de ciclo.", null));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public List<RegistroManual> getRegManuales() {
+		return regManuales;
+	}
+	
+	public void setRegManuales(List<RegistroManual> regManuales) {
+		this.regManuales = regManuales;
+	}
+	
+	public List<Motivo> getMotivos() {
+		return motivos;
+	}
+	
+	public void setMotivos(List<Motivo> motivos) {
+		this.motivos = motivos;
+	}
+	
+	public List<String> getHorasInicio() {
+		return horasInicio;
+	}
+	
+	public void setHorasInicio(List<String> horasInicio) {
+		this.horasInicio = horasInicio;
+	}
+	
+	public List<String> getHorasSalida() {
+		return horasSalida;
+	}
+	
+	public void setHorasSalida(List<String> horasSalida) {
+		this.horasSalida = horasSalida;
+	}
+	
+	public RegistroManualDataModel getRegManualDataModel() {
+		return regManualDataModel;
+	}
+	
+	public void setRegManualDataModel(RegistroManualDataModel regManualDataModel) {
+		this.regManualDataModel = regManualDataModel;
+	}
+	
+	public java.util.Date getFechaSeleccionada() {
+		return fechaSeleccionada;
+	}
+	
+	public void setFechaSeleccionada(java.util.Date fechaSeleccionada) {
+		this.fechaSeleccionada = fechaSeleccionada;
+	}
+	
+	public String getInicioSeleccionado() {
+		return inicioSeleccionado;
+	}
+	
+	public void setInicioSeleccionado(String inicioSeleccionado) {
+		this.inicioSeleccionado = inicioSeleccionado;
+	}
+	
+	public String getSalidaSeleccionada() {
+		return salidaSeleccionada;
+	}
+	
+	public void setSalidaSeleccionada(String salidaSeleccionada) {
+		this.salidaSeleccionada = salidaSeleccionada;
+	}
+	
+	public int getMotivoSeleccionado() {
+		return motivoSeleccionado;
+	}
+	
+	public void setMotivoSeleccionado(int motivoSeleccionado) {
+		this.motivoSeleccionado = motivoSeleccionado;
+	}
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	
+	public RegistroManual[] getRegSeleccionados() {
+		return regSeleccionados;
+	}
+	
+	public void setRegSeleccionados(RegistroManual[] regSeleccionados) {
+		this.regSeleccionados = regSeleccionados;
+	}
+	
+	public String getCiclo() {
+		return ciclo;
+	}
+	
+	public void setCiclo(String ciclo) {
+		this.ciclo = ciclo;
+	}
+	
+	public boolean isShowDialog() {
+		return showDialog;
+	}
+	
+	public void setShowDialog(boolean showDialog) {
+		this.showDialog = showDialog;
+	}
+}
+

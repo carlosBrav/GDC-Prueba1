@@ -1,0 +1,99 @@
+package pe.edu.sistemas.siscadweb.entities;
+
+import java.sql.Time;
+
+public class HorarioClase {
+	private int idHorarioClase;
+    private int idGrupo;
+    private int idDocente;
+    private int dia;
+    private Time horaInicio;
+    private Time horaFin;
+    private String aula;
+    private String horarioClaseTipo;
+    private String horarioClasePeriodo;
+    
+	public int getIdHorarioClase() {
+		return idHorarioClase;
+	}
+	
+	public void setIdHorarioClase(int idHorarioClase) {
+		this.idHorarioClase = idHorarioClase;
+	}
+
+	public int getIdGrupo() {
+		return idGrupo;
+	}
+
+	public void setIdGrupo(int idGrupo) {
+		this.idGrupo = idGrupo;
+	}
+
+	public int getIdDocente() {
+		return idDocente;
+	}
+
+	public void setIdDocente(int idDocente) {
+		this.idDocente = idDocente;
+	}
+
+	public Time getHoraInicio() {
+		return horaInicio;
+	}
+
+	public void setHoraInicio(Time horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+
+	public Time getHoraFin() {
+		return horaFin;
+	}
+
+	public void setHoraFin(Time horaFin) {
+		this.horaFin = horaFin;
+	}
+
+	public String getAula() {
+		return aula;
+	}
+
+	public void setAula(String aula) {
+		this.aula = aula;
+	}
+
+	public int getDia() {
+		return dia;
+	}
+
+	public void setDia(int dia) {
+		this.dia = dia;
+	}
+
+	public String getHorarioClaseTipo() {
+		return horarioClaseTipo;
+	}
+
+	public void setHorarioClaseTipo(String horarioClaseTipo) {
+		this.horarioClaseTipo = horarioClaseTipo;
+	}
+
+	public String getHorarioClasePeriodo() {
+		return horarioClasePeriodo;
+	}
+
+	public void setHorarioClasePeriodo(String horarioClasePeriodo) {
+		this.horarioClasePeriodo = horarioClasePeriodo;
+	}
+	@Override
+	public String toString(){
+		return 	idHorarioClase + " " +
+				idGrupo + " " +
+			    idDocente + " " +
+			    dia + " " +
+			    horaInicio + " " +
+			    horaFin + " " +
+			    aula + " " +
+			    horarioClaseTipo + " " +
+			    horarioClasePeriodo;
+	}
+}

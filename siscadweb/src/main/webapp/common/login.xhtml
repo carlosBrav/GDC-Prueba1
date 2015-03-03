@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>..::Sistema de Asistencia Docente::..</title>
+		</f:facet>
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/resources/css/loginEstilo.css" />
+	</h:head>
+
+	<h:body>
+
+		<pe:layout fullPage="true">
+			<!--<p:ajaxStatus id="ajaxStatus" style="width:32px;height:32px;position: absolute; z-index:1;  top:50%;left:50%;margin-left:-100px; margin-top:-50px">
+					<f:facet name="start">
+						<p:panel style="width:85px;height:85px;margin-left:25px">
+						<div align="center">
+						<h:outputText value="Cargando"/>
+						<h:graphicImage value="/resources/img/load.gif" style="margin-left:-25px"/>
+						</div>
+						</p:panel>
+					</f:facet>
+					<f:facet name="complete">
+						<h:outputText value="" />
+					</f:facet>
+			</p:ajaxStatus>  -->
+			<pe:layoutPane position="north" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoEncabezado"
+					style="width:100%;">
+
+					<h:form style="text-align:left;">
+						<!--<p:graphicImage value="/resources/img/encabezadoIzq.JPG"
+							style="height: 70px; width: 250px" />  -->
+						<iframe
+							src="/siscadweb/resources/encabezados/izquierdo/izquierdo.html"
+							width="250px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+
+					</h:form>
+
+					<h:form style="text-align:right;">
+						<!--  <p:graphicImage value="/images/ui/encabezadoDer3.JPG"
+							style="height: 70px; width: 200px" />-->
+						<iframe
+							src="/siscadweb/resources/encabezados/derecho/derecho.html"
+							width="400px" height="85px" frameborder="0" scrolling="no"
+							allowTransparency="true"></iframe>
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+
+			<pe:layoutPane id="lycLogin" position="center" style="padding:0">
+				<!-- Este layoutCentro tiene un estilo definido por su id -->
+				
+				<h:form prependId="false" id="login_form">
+					<p:growl id="idGrowl" for="mensajes"
+						sticky="true" />
+
+					<!--<p:growl id="idGrowl" life="6000" sticky="true" for="mensajes">
+				        <h:outputScript>
+				            $("#idGrowl_container").effect("pulsate", { times:1 }, 4000);
+				        </h:outputScript>
+				    </p:growl>  -->
+					<p:panel id="panelLogin" header="Iniciar Sesión"
+						style="border:2px solid black;width:330px; margin-left:62%;margin-right:5%; margin-top:12%;font-size:13px">
+						<h:panelGrid columns="3">
+							<h:outputText value="* Usuario: " />
+							<p:inputText id="usuario" required="true"
+								value="#{loginController.codigo}"
+								requiredMessage="usuario requerido" />
+							<h:outputText value="" />
+							<h:outputText value="" />
+							<p:message for="usuario" />
+							<h:outputText value="" />
+							
+							<h:outputText value="* Contraseña: " />
+							<p:password id="password" required="true" requiredMessage="password requerido"
+								value="#{loginController.password}" />
+							<!--  <p:password id="password" required="true" feedback="true" inline="true" promptLabel="ingrese su clave" weakLabel="dÃƒÂ©bil"  
+                        		goodLabel="bueno" strongLabel="seguro" requiredMessage="password requerido"
+								value="#{loginController.password}" />-->
+							<h:outputText value="" />
+							<p:message for="password" />
+
+						</h:panelGrid>
+						<h:outputText value="" />
+						<!--<h:panelGrid columns="2" cel-spacing="2">
+							<p:selectBooleanCheckbox value="#{loginController.rememberMe}" />
+							<h:outputText value="Recordarme en el equipo"
+								style="font-size:12px;font-style: italic" />
+						</h:panelGrid>  -->
+						<p:commandButton id="loginb" value="INGRESAR"
+							action="#{loginController.login}" update="panelLogin, idGrowl"
+							style="margin-left:106px;margin-top:5px" />
+						<br></br>
+						<br></br>
+						<p:commandLink id="olvidoPass"
+							actionListener="#{pprBean.savePerson}" style="margin-left:84px;font-size:12px;font-style:italic;color:#FF0000">
+							<h:outputText value="¿Olvidó su contraseña?"/>
+						</p:commandLink>
+						<p:tooltip for="olvidoPass" value="Se le enviará un mensaje al correo para cambiar su contraseña" showEffect="fade" hideEffect="explode" />
+					</p:panel>
+				</h:form>
+			</pe:layoutPane>
+
+			<pe:layoutPane position="south" closable="false" resizable="false"
+				style="padding:0">
+				<h:panelGrid columns="2" styleClass="fondoFooter"
+					style="width:100%;height:55px">
+					<h:form
+						style="text-align:left;color:#FFFFFF;margin-left:10px;font-weight: bold">
+						<h:outputText value="SISCADWEB - Area de Desarrollo de Software" />
+					</h:form>
+
+					<h:form
+						style="text-align:right;color:#FFFFFF;margin-right:10px;font-weight: bold">
+						<h:outputText value="V 1.0" />
+					</h:form>
+				</h:panelGrid>
+			</pe:layoutPane>
+			
+			
+			
+		</pe:layout>
+		
+		
+	</h:body>
+</f:view>
+</html>
